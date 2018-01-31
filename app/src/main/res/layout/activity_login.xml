@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background1"
+    android:orientation="vertical"
     tools:context="xom.example.android.elab_project.LoginActivity">
 
     <LinearLayout
@@ -12,11 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="10dp"
-        >
+        android:paddingTop="10dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -40,20 +41,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_margin="16dp">
+            android:layout_margin="16dp"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background2"
-                android:padding="5dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                android:background="@color/background2"
+                android:orientation="vertical"
+                android:padding="5dp">
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/username"
                         android:layout_width="match_parent"
@@ -61,11 +65,13 @@
                         android:layout_marginTop="10dp"
                         android:hint="Username:" />
                 </android.support.design.widget.TextInputLayout>
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
@@ -82,17 +88,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="LOGIN"/>
+                android:text="LOGIN" />
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:gravity="center"
                 android:background="?android:attr/selectableItemBackground"
-                android:textColor="@android:color/darker_gray"
-                android:text="forgot password?"/>
+                android:gravity="center"
+                android:text="forgot password?"
+                android:textAllCaps="false"
+                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
-
 
 
     </LinearLayout>

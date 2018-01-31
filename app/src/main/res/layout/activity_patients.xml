@@ -6,224 +6,295 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="xom.example.android.elab_project.PatientsActivity">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            app:layout_scrollFlags="scroll|enterAlways" />
     </android.support.design.widget.AppBarLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Personal Details"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/background3"
+            android:orientation="vertical"
+            android:padding="5dp">
+
             <LinearLayout
-                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 android:weightSum="11">
+
                 <TextView
-                    android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:text="Name :"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/fName"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="5dp"
-                    android:layout_weight="3"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+
                 <TextView
                     android:id="@+id/mName"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_weight="3"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+
                 <TextView
                     android:id="@+id/lName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"/>
+                    android:paddingRight="5dp" />
 
             </LinearLayout>
+
             <LinearLayout
-                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 android:weightSum="12">
+
                 <TextView
-                    android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:text="D.O.B :"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/dob"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="5dp"
-                    android:layout_weight="4"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
                 <TextView
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_weight="2"
+
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:text="Phone:"
-                    android:textStyle="bold"
-                    android:layout_height="wrap_content"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/phone"
-                    android:layout_weight="4"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="12">
-                <TextView
-                    android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:text="Email :"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/email"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="5dp"
-                    android:layout_weight="10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="12">
-                <TextView
-                    android:layout_weight="4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
                     android:text="Patient Type :"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/visit_type"
-                    android:paddingRight="5dp"
-                    android:paddingLeft="5dp"
-                    android:layout_weight="8"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
 
             </LinearLayout>
 
         </LinearLayout>
+
         <TextView
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Insurance Details"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"/>
-        <LinearLayout
             android:layout_marginTop="8dp"
+            android:text="Insurance Details"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/background3"
             android:orientation="horizontal"
+            android:padding="5dp"
             android:weightSum="12">
+
             <TextView
-                android:layout_weight="3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Companty :"
+                android:layout_weight="3"
+                android:text="Company :"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/insurance_company"
-                android:paddingRight="5dp"
-                android:paddingLeft="5dp"
-                android:layout_weight="3"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp" />
+
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_weight="3"
-                android:layout_width="0dp"
                 android:text="Member:"
-                android:textStyle="bold"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/insurance_No"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"/>
+                android:paddingRight="5dp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
+            android:padding="5dp"
             android:weightSum="12">
+
             <TextView
-                android:layout_weight="4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="4"
                 android:text="Diagnosis:"
-                android:textStyle="bold"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/diagnosis"
-                android:paddingRight="5dp"
-                android:paddingLeft="5dp"
-                android:layout_weight="8"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:background="@color/background3"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
 
         </LinearLayout>
 
-        <TextView
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Test/s"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"/>
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Test/s"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/no_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/background3"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="No Tests!"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <ListView
+                android:id="@+id/test_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </LinearLayout>

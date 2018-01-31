@@ -1,9 +1,9 @@
 package xom.example.android.elab_project;
 
 import android.app.DatePickerDialog;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,16 +16,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import xom.example.android.elab_project.gettersAndSetters.Patients;
+import xom.example.android.elab_project.myClass.DatabaseHandler;
 import xom.example.android.elab_project.myClass.Mystrings;
 
 public class AddPatientActivity extends AppCompatActivity {
@@ -33,13 +36,16 @@ public class AddPatientActivity extends AppCompatActivity {
     String mySpecimen = "";
     String myTest_type = "";
     String visit = "";
+    String myLab = "";
     DatabaseHandler DB;
+    String[] myTestArray;
+    List<String[]> tests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_form);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
@@ -50,45 +56,26 @@ public class AddPatientActivity extends AppCompatActivity {
 
 
         //views initialisation
-        final TextInputEditText fName = (TextInputEditText)findViewById(R.id.fName);
-        final TextInputEditText mName = (TextInputEditText)findViewById(R.id.mName);
-        final TextInputEditText lName = (TextInputEditText)findViewById(R.id.lName);
-        final TextInputEditText email = (TextInputEditText)findViewById(R.id.email);
-        final TextInputEditText phone = (TextInputEditText)findViewById(R.id.phone);
-        final TextInputEditText dob =(TextInputEditText)findViewById(R.id.dob);
-        final Switch insurance_switch = (Switch)findViewById(R.id.insurance_switch);
-        final LinearLayout insurance_section = (LinearLayout)findViewById(R.id.insurance_section);
-        final Spinner insurance_company = (Spinner)findViewById(R.id.insurance_company);
-        final TextInputEditText insurance_No = (TextInputEditText)findViewById(R.id.insurance_No);
-        final EditText diagnosis = (EditText)findViewById(R.id.diagnosis);
-        final Switch test_switch = (Switch)findViewById(R.id.test_switch);
-        final LinearLayout test_section = (LinearLayout)findViewById(R.id.test_section);
-        final Spinner specimen = (Spinner) findViewById(R.id.specimen);
-        final Spinner test_type = (Spinner)findViewById(R.id.test_type);
-        Button prev_test = (Button)findViewById(R.id.prev_testBtn);
-        Button next_test = (Button)findViewById(R.id.next_testBtn);
-        final Spinner visit_type = (Spinner)findViewById(R.id.visit_type);
+        final TextInputEditText fName = (TextInputEditText) findViewById(R.id.fName);
+        final TextInputEditText mName = (TextInputEditText) findViewById(R.id.mName);
+        final TextInputEditText lName = (TextInputEditText) findViewById(R.id.lName);
+        final TextInputEditText email = (TextInputEditText) findViewById(R.id.email);
+        final TextInputEditText phone = (TextInputEditText) findViewById(R.id.phone);
+        final EditText diagnosis = (EditText) findViewById(R.id.diagnosis);
+
+
+        final Spinner visit_type = (Spinner) findViewById(R.id.visit_type);
+
 
         DB = new DatabaseHandler(AddPatientActivity.this);
-        ArrayAdapter<String> myVisitTypeAdapter = new ArrayAdapter<String>(AddPatientActivity.this,R.layout.list_spinner,Mystrings.visit_type);
-        myVisitTypeAdapter.setDropDownViewResource(R.layout.list_spinner);
-        visit_type.setAdapter(myVisitTypeAdapter);
+
+        tests = new ArrayList<>();
 
 
-        ArrayAdapter<String> mySpecimenAdapter = new ArrayAdapter<String>(AddPatientActivity.this,R.layout.list_spinner,Mystrings.specimens);
-        mySpecimenAdapter.setDropDownViewResource(R.layout.list_spinner);
-        specimen.setAdapter(mySpecimenAdapter);
-
-        ArrayAdapter<String> insuranceCompanyAdapter = new ArrayAdapter<String>(AddPatientActivity.this,R.layout.list_spinner,Mystrings.insuranceCompany);
-        insuranceCompanyAdapter.setDropDownViewResource(R.layout.list_spinner);
-        insurance_company.setAdapter(insuranceCompanyAdapter);
-
-        ArrayAdapter<String> myTestAdapter = new ArrayAdapter<String>(AddPatientActivity.this,R.layout.list_spinner,Mystrings.testTypes);
-        myTestAdapter.setDropDownViewResource(R.layout.list_spinner);
-        test_type.setAdapter(myTestAdapter);
-
+        // Picking date of birth
+        final TextInputEditText dob = (TextInputEditText) findViewById(R.id.dob);
          /*Date picking dialog*//**/
-       final Calendar myCalendar = Calendar.getInstance();
+        final Calendar myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -98,7 +85,7 @@ public class AddPatientActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                setDate(dob,myCalendar);
+                setDate(dob, myCalendar);
             }
         };
 
@@ -111,47 +98,50 @@ public class AddPatientActivity extends AppCompatActivity {
             }
         });
 
-
-       //insurance section
-        insurance_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                   insurance_section.setVisibility(View.VISIBLE);
-                }
-                else {
-                   insurance_section.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        //Test section
-        test_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                   test_section.setVisibility(View.VISIBLE);
-                }else{
-                   test_section.setVisibility(View.GONE);
-                }
-            }
-        });
         //getting visit type
+        ArrayAdapter<String> myVisitTypeAdapter = new ArrayAdapter<String>(AddPatientActivity.this, R.layout.list_spinner, Mystrings.visit_type);
+        myVisitTypeAdapter.setDropDownViewResource(R.layout.list_spinner);
+        visit_type.setAdapter(myVisitTypeAdapter);
+
         visit_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                visit = Mystrings.visit_type[position];
+                if (position != 0)
+                    visit = Mystrings.visit_type[position];
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+
+        //insurance section
+        final Switch insurance_switch = (Switch) findViewById(R.id.insurance_switch);
+        final LinearLayout insurance_section = (LinearLayout) findViewById(R.id.insurance_section);
+        final Spinner insurance_company = (Spinner) findViewById(R.id.insurance_company);
+        final TextInputEditText insurance_No = (TextInputEditText) findViewById(R.id.insurance_No);
+
+        insurance_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    insurance_section.setVisibility(View.VISIBLE);
+                } else {
+                    insurance_section.setVisibility(View.GONE);
+                }
+            }
+        });
         //getting insurance company name
+        ArrayAdapter<String> insuranceCompanyAdapter = new ArrayAdapter<String>(AddPatientActivity.this, R.layout.list_spinner, Mystrings.insuranceCompany);
+        insuranceCompanyAdapter.setDropDownViewResource(R.layout.list_spinner);
+        insurance_company.setAdapter(insuranceCompanyAdapter);
+
         insurance_company.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                insurance_company_name = Mystrings.insuranceCompany[position];
+                if (position != 0)
+                    insurance_company_name = Mystrings.insuranceCompany[position];
             }
 
             @Override
@@ -160,11 +150,35 @@ public class AddPatientActivity extends AppCompatActivity {
 
             }
         });
+        //Test section
+        final LinearLayout test_section = (LinearLayout) findViewById(R.id.test_section);
+        final Spinner specimen = (Spinner) findViewById(R.id.specimen);
+        final Spinner test_type = (Spinner) findViewById(R.id.test_type);
+        Button next_test = (Button) findViewById(R.id.next_testBtn);
+        final Switch test_switch = (Switch) findViewById(R.id.test_switch);
+        final Spinner lab = (Spinner) findViewById(R.id.test_lab);
+        final TextView test_count = (TextView) findViewById(R.id.test_count);
+        test_count.setText(String.valueOf(tests.size() + 1));
+        test_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    test_section.setVisibility(View.VISIBLE);
+                } else {
+                    test_section.setVisibility(View.GONE);
+                }
+            }
+        });
         //select specimen
+        ArrayAdapter<String> mySpecimenAdapter = new ArrayAdapter<String>(AddPatientActivity.this, R.layout.list_spinner, Mystrings.specimens);
+        mySpecimenAdapter.setDropDownViewResource(R.layout.list_spinner);
+        specimen.setAdapter(mySpecimenAdapter);
+
         specimen.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mySpecimen = Mystrings.specimens[position];
+                if (position != 0)
+                    mySpecimen = Mystrings.specimens[position];
 
             }
 
@@ -174,114 +188,164 @@ public class AddPatientActivity extends AppCompatActivity {
             }
         });
         //select test type
+        ArrayAdapter<String> myTestAdapter = new ArrayAdapter<String>(AddPatientActivity.this, R.layout.list_spinner, Mystrings.testTypes);
+        myTestAdapter.setDropDownViewResource(R.layout.list_spinner);
+        test_type.setAdapter(myTestAdapter);
+
         test_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                myTest_type = Mystrings.testTypes[position];
+                if (position != 0)
+                    myTest_type = Mystrings.testTypes[position];
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-               myTest_type = "";
+                myTest_type = "";
             }
         });
 
-        Button submit = (Button)findViewById(R.id.SubmitBtn);
+        //select lab to carry test
+        ArrayAdapter<String> myLabAdapter = new ArrayAdapter<String>(AddPatientActivity.this, R.layout.list_spinner, Mystrings.labs);
+        myLabAdapter.setDropDownViewResource(R.layout.list_spinner);
+        lab.setAdapter(myLabAdapter);
+
+        lab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0)
+                    myLab = Mystrings.labs[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                myLab = "";
+
+            }
+        });
+        //selecting next test to be carried
+        next_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (next_test(mySpecimen, myTest_type, myLab)) {
+                    test_count.setText(String.valueOf(tests.size() + 1));
+                }
+
+            }
+        });
+
+
+        //submitting details
+        Button submit = (Button) findViewById(R.id.SubmitBtn);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              if( validate(fName,mName,lName,phone,email,dob,insurance_switch,insurance_company_name,insurance_No,diagnosis,test_switch,mySpecimen,myTest_type,visit))
-                  submit(fName,mName,lName,email,phone,dob,insurance_switch,insurance_company_name,insurance_No,diagnosis,test_switch,mySpecimen,myTest_type,visit);
+                if (validate(fName, mName, lName, phone, email, dob, insurance_switch, insurance_company_name, insurance_No, diagnosis, test_switch, mySpecimen, myTest_type, visit) && next_test(mySpecimen, myTest_type, myLab))
+                    submit(fName, mName, lName, email, phone, dob, insurance_switch, insurance_company_name, insurance_No, diagnosis, test_switch, tests, visit);
             }
         });
     }
 
-    private void setDate(TextInputEditText dob,Calendar myCalendar) {
+    private void setDate(TextInputEditText dob, Calendar myCalendar) {
         String myFormat = "EEE dd-MMM-yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
         dob.setError(null);
         dob.setText(sdf.format(myCalendar.getTime()));
     }
 
+    private boolean next_test(String mySpecimen, String myTest_type, String myLab) {
+        if (mySpecimen.isEmpty()) {
+            Toast.makeText(AddPatientActivity.this, "choose specimen", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (myTest_type.isEmpty()) {
+            Toast.makeText(AddPatientActivity.this, "choose test", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (myLab.isEmpty()) {
+            Toast.makeText(AddPatientActivity.this, "choose Lab", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        myTestArray = new String[]{mySpecimen, myTest_type, myLab};
+        tests.add(myTestArray);
+        return true;
+    }
+
     /**
-     *
-      * @param fName patient first name
-     * @param mName patient middle name
-     * @param lName patient last name
-     * @param phone patient phone
-     * @param dob patient date of birth
-     * @param insurance_switch switch to open insurance section
+     * @param fName             patient first name
+     * @param mName             patient middle name
+     * @param lName             patient last name
+     * @param phone             patient phone
+     * @param dob               patient date of birth
+     * @param insurance_switch  switch to open insurance section
      * @param insurance_company insurance name
-     * @param insurance_no member no
-     * @param diagnosis patient diagnosis
-     * @param test_switch switch to open test section
-     * @param specimen patient specimen
-     * @param test_type test to be performed
+     * @param insurance_no      member no
+     * @param diagnosis         patient diagnosis
+     * @param test_switch       switch to open test section
+     * @param specimen          patient specimen
+     * @param test_type         test to be performed
      * @return boolean
      */
-    private boolean validate(TextInputEditText fName, TextInputEditText mName, TextInputEditText lName, TextInputEditText phone,TextInputEditText email, TextInputEditText dob, Switch insurance_switch, String insurance_company, TextInputEditText insurance_no, EditText diagnosis, Switch test_switch, String specimen, String test_type,String visit_type) {
+    private boolean validate(TextInputEditText fName, TextInputEditText mName, TextInputEditText lName, TextInputEditText phone, TextInputEditText email, TextInputEditText dob, Switch insurance_switch, String insurance_company, TextInputEditText insurance_no, EditText diagnosis, Switch test_switch, String specimen, String test_type, String visit_type) {
         Pattern mobile = Pattern.compile("(?:254|\\+254|0){1}[ ]?[7]{1}([0-9]{1}[0-9]{1})[ ]?[0-9]{3}[ ]?[0-9]{3}\\z");
-
         Pattern emai = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
         Matcher matcherMobile = mobile.matcher(phone.getText().toString());
         Matcher matcherEmail = emai.matcher(email.getText().toString());
-        if(fName.getText()==null || fName.getText().toString().isEmpty()){
+        if (fName.getText() == null || fName.getText().toString().isEmpty()) {
             fName.requestFocus();
             fName.setError("field is required");
             return false;
-        }else if(mName.getText()==null || mName.getText().toString().isEmpty()){
+        } else if (mName.getText() == null || mName.getText().toString().isEmpty()) {
             mName.requestFocus();
             mName.setError("field is required");
             return false;
-        }else if(lName.getText()==null || lName.getText().toString().isEmpty()){
+        } else if (lName.getText() == null || lName.getText().toString().isEmpty()) {
             lName.requestFocus();
             lName.setError("field is required");
             return false;
-        }else if(!email.getText().toString().isEmpty() && !matcherEmail.matches()){
+        } else if (!email.getText().toString().isEmpty() && !matcherEmail.matches()) {
             email.requestFocus();
             email.setError("Invalid Email!");
             return false;
-        }else if(phone.getText()==null || phone.getText().toString().isEmpty()){
+        } else if (phone.getText() == null || phone.getText().toString().isEmpty()) {
             phone.requestFocus();
             phone.setError("field is required");
             return false;
-        }else if(!phone.getText().toString().isEmpty() && !matcherMobile.matches()){
+        } else if (!phone.getText().toString().isEmpty() && !matcherMobile.matches()) {
             phone.requestFocus();
             phone.setError("Invalid Phone Number!");
             return false;
-        }else if(dob.getText()==null || dob.getText().toString().isEmpty()){
+        } else if (dob.getText() == null || dob.getText().toString().isEmpty()) {
             dob.requestFocus();
             dob.setError("field is required");
             return false;
-        }else if(visit_type.isEmpty()){
-            Toast.makeText(AddPatientActivity.this,"Select Visit Type!",Toast.LENGTH_SHORT).show();
+        } else if (visit_type.isEmpty()) {
+            Toast.makeText(AddPatientActivity.this, "Select Visit Type!", Toast.LENGTH_SHORT).show();
             return false;
 
-        }else if(insurance_switch.isChecked()){
-           if(insurance_company.isEmpty()){
-               Toast.makeText(AddPatientActivity.this,"Select Company!",Toast.LENGTH_SHORT).show();
-               return false;
-           }else if(insurance_no.getText()==null || insurance_no.getText().toString().isEmpty()) {
-               insurance_no.requestFocus();
-               insurance_no.setError("field is required");
-               return false;
-           }
-        }else if(diagnosis.getText()==null||diagnosis.getText().toString().isEmpty()){
+        } else if (insurance_switch.isChecked()) {
+            if (insurance_company.isEmpty()) {
+                Toast.makeText(AddPatientActivity.this, "Select Company!", Toast.LENGTH_SHORT).show();
+                return false;
+            } else if (insurance_no.getText() == null || insurance_no.getText().toString().isEmpty()) {
+                insurance_no.requestFocus();
+                insurance_no.setError("field is required");
+                return false;
+            }
+        } else if (diagnosis.getText() == null || diagnosis.getText().toString().isEmpty()) {
             diagnosis.requestFocus();
             diagnosis.setError("Diagnosis can't be empty");
-        }else if(test_switch.isChecked()){
-            if(specimen.isEmpty()){
-                Toast.makeText(AddPatientActivity.this,"Select Specimen!",Toast.LENGTH_SHORT).show();
+        } else if (test_switch.isChecked()) {
+            if (specimen.isEmpty()) {
+                Toast.makeText(AddPatientActivity.this, "Select Specimen!", Toast.LENGTH_SHORT).show();
                 return false;
-            }else if(test_type.isEmpty()){
-                Toast.makeText(AddPatientActivity.this,"Select Test!",Toast.LENGTH_SHORT).show();
+            } else if (test_type.isEmpty()) {
+                Toast.makeText(AddPatientActivity.this, "Select Test!", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
         return true;
     }
 
-    private void submit(TextInputEditText fName, TextInputEditText mName, TextInputEditText lName, TextInputEditText email, TextInputEditText phone, TextInputEditText dob, Switch insurance_switch, String  company_name, TextInputEditText insurance_no, EditText diagnosis, Switch test_switch, String specimen, String test_type,String visit) {
+    private void submit(TextInputEditText fName, TextInputEditText mName, TextInputEditText lName, TextInputEditText email, TextInputEditText phone, TextInputEditText dob, Switch insurance_switch, String company_name, TextInputEditText insurance_no, EditText diagnosis, Switch test_switch, List<String[]> myTests, String visit) {
         Patients details = new Patients();
         details.setfName(fName.getText().toString());
         details.setmName(mName.getText().toString());
@@ -290,36 +354,34 @@ public class AddPatientActivity extends AppCompatActivity {
         details.setPhone(phone.getText().toString());
         details.setDob(dob.getText().toString());
         details.setVisit_Type(visit);
-        if(insurance_switch.isChecked()){
+        if (insurance_switch.isChecked()) {
             details.setInsurance_switch(true);
-        }else{
+        } else {
             details.setInsurance_switch(false);
         }
         details.setInsurance_company(company_name);
         details.setInsurance_No(insurance_no.getText().toString());
         details.setDiagnosis(diagnosis.getText().toString());
-        if(test_switch.isChecked()){
-          details.setTest_switch(true);
-        }else{
-           details.setTest_switch(false);
+        if (test_switch.isChecked()) {
+            details.setTest_switch(true);
+        } else {
+            details.setTest_switch(false);
         }
-        details.setSpecimen(specimen);
-        details.setTest_type(test_type);
+        details.setTests(myTests);
 
-      DB.addPatient(details);
+        DB.addPatient(details);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }
